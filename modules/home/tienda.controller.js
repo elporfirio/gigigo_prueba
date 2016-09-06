@@ -49,15 +49,27 @@
         }
 
         function guardarProducto(producto) {
+            var msg = {};
+
+            if(producto.id == null){
+                msg.title = 'Nuevo Producto';
+                msg.text = 'Creado Satisfactoriamente';
+            } else {
+                msg.title = 'Cambios de Producto';
+                msg.text = 'Guardados Satisfactoriamente';
+            }
             tiendaService.saveProducto(producto)
                 .then(function (result) {
                     if (result.success) {
                         vm.producto.id = null;
                         vm.producto.name = null;
+
+
                         vm.agregarNuevo = false;
 
                         //TODO: optimizar
                         vm.obtenerProductos();
+                        swal(msg.title, msg.text, "success")
                     }
                 })
         }
