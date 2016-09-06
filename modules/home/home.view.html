@@ -1,35 +1,63 @@
-<a ui-sref="logout">Cerrar sesión</a>
-<h1>Tiendita</h1>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th colspan="2">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img alt="Brand" src="assets/img/latiendita_small-02.png" width="140">
+            </a>
+        </div>
 
-        </th>
-    </tr>
-    <tr ng-repeat="producto in tiendactrl.productos">
-        <td>
-            {{ producto.id }}
-        </td>
-        <td>
-            <a href="" ng-click="tiendactrl.detalleProducto(producto)">{{ producto.name }}</a>
-        </td>
-        <td>
-            <button ng-click="tiendactrl.mostrarEditar(producto)">editar</button>
-        </td>
-        <td>
-            <button ng-click="tiendactrl.eliminarProducto(producto)">eliminar</button>
-        </td>
-    </tr>
-</table>
+        <p class="navbar-text navbar-right"><a class="btn btn-default navbar-btn" ui-sref="logout">Cerrar sesión</a></p>
+    </div>
+</nav>
 
-<button ng-click="tiendactrl.mostrarNuevo()" ng-hide="tiendactrl.agregarNuevo">Agregar</button>
+<div class="container">
+    <div class="col-xs-8 col-xs-offset-2">
+        <h1>Productos</h1>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <button ng-click="tiendactrl.mostrarNuevo()" class="btn btn-success" ng-hide="tiendactrl.agregarNuevo"><i class="glyphicon glyphicon-plus-sign"></i> Agregar</button>
+                    <button ng-click="tiendactrl.cancelarNuevo()" class="btn btn-danger" ng-show="tiendactrl.agregarNuevo"><i class="glyphicon glyphicon-ban-circle"></i> Cancelar</button>
+                </div>
+                <h4>Control de Productos</h4>
+            </div>
 
-<div ng-show="tiendactrl.agregarNuevo">
-    <div ng-include="'modules/home/producto.form.html'" ></div>
-</div>
+            <!-- Table -->
+            <table class="table table-striped" ng-hide="tiendactrl.agregarNuevo || tiendactrl.mostrarDetalle">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th colspan="2">
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="producto in tiendactrl.productos">
+                    <td>
+                        {{ producto.id }}
+                    </td>
+                    <td>
+                        <a href="" ng-click="tiendactrl.detalleProducto(producto)">{{ producto.name }}</a>
+                    </td>
+                    <td>
+                        <button ng-click="tiendactrl.mostrarEditar(producto)" class="btn btn-sm btn-default btn-info"><i class="glyphicon glyphicon-edit"></i> editar</button>
+                    </td>
+                    <td>
+                        <button ng-click="tiendactrl.eliminarProducto(producto)" class="btn btn-sm btn-default btn-warning"><i class="glyphicon glyphicon glyphicon-remove-sign"></i> eliminar</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-<div ng-show="tiendactrl.mostrarDetalle">
-    <div ng-include="'modules/home/producto.view.html'" ></div>
+        <div ng-show="tiendactrl.agregarNuevo">
+            <div ng-include="'modules/home/producto.form.html'"></div>
+        </div>
+
+        <div ng-show="tiendactrl.mostrarDetalle">
+            <div ng-include="'modules/home/producto.view.html'"></div>
+        </div>
+    </div>
 </div>

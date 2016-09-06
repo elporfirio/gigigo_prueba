@@ -8,10 +8,10 @@
         .module('tiendita')
         .controller('TiendaController', TiendaController);
 
-    TiendaController.$inject = ['TiendaService'];
+    TiendaController.$inject = ['TiendaService', 'AuthService', '$state'];
 
     /* @ngInject */
-    function TiendaController(tiendaService) {
+    function TiendaController(tiendaService, AuthService, $state) {
         var vm = this;
         vm.title = 'TiendaController';
 
@@ -32,24 +32,26 @@
         //Interaccion
         vm.mostrarEditar = mostrarEditar;
         vm.mostrarNuevo = mostrarNuevo;
+        vm.cancelarNuevo = cancelarNuevo;
+        vm.regresarDetalle = regresarDetalle;
 
         activate();
 
         ////////////////
 
-        function obtenerProductos(){
+        function obtenerProductos() {
             tiendaService.getProductos()
-                .then(function(result){
-                if(result.success) {
-                    vm.productos = result.response.products;
-                }
+                .then(function (result) {
+                    if (result.success) {
+                        vm.productos = result.response.products;
+                    }
                 })
         }
 
-        function guardarProducto(producto){
+        function guardarProducto(producto) {
             tiendaService.saveProducto(producto)
-                .then(function(result){
-                    if(result.success){
+                .then(function (result) {
+                    if (result.success) {
                         vm.producto.id = null;
                         vm.producto.name = null;
                         vm.agregarNuevo = false;
@@ -61,43 +63,68 @@
         }
 
 
-        function eliminarProducto(producto){
-            tiendaService.deleteProducto(producto)
-                .then(function(result){
-                    if(result.success){
-                        vm.producto.id = null;
-                        vm.producto.name = null;
-                        vm.agregarNuevo = false;
+        function eliminarProducto(producto) {
+            swal({
+                title: "¿Esta seguro?",
+                text: "El producto " + producto.name + " será eliminado.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Eliminar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false
+            }, function () {
+                tiendaService.deleteProducto(producto)
+                    .then(function (result) {
+                        if (result.success) {
+                            vm.producto.id = null;
+                            vm.producto.name = null;
+                            vm.agregarNuevo = false;
 
-                        //TODO: optimizar
-                        vm.obtenerProductos();
-                    }
-                })
+                            //TODO: optimizar
+                            vm.obtenerProductos();
+                            swal("Eliminado", producto.name, "success");
+                        }
+                    })
+            });
+
         }
 
-        function detalleProducto(producto){
+        function detalleProducto(producto) {
             tiendaService.detailProducto(producto)
-                .then(function(result){
-                    if(result.success){
+                .then(function (result) {
+                    if (result.success) {
                         vm.producto = result.response.product;
                         vm.mostrarDetalle = true;
                     }
                 });
-            console.info(producto);
         }
 
-        function mostrarNuevo(){
+        function mostrarNuevo() {
             vm.agregarNuevo = true;
             vm.mostrarDetalle = false;
         }
 
-        function mostrarEditar(producto){
+        function mostrarEditar(producto) {
             vm.agregarNuevo = true;
             vm.mostrarDetalle = false;
             vm.producto = angular.copy(producto);
         }
 
+        function cancelarNuevo() {
+            vm.agregarNuevo = false;
+            vm.producto.id = null;
+            vm.producto.name = null;
+        }
+
+         function regresarDetalle(){
+             vm.mostrarDetalle = false;
+         }
+
         function activate() {
+            if(AuthService.isLoggedIn() == false){
+                return $state.go('inicio');
+            }
             vm.obtenerProductos();
         }
     }

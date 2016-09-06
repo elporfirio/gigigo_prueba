@@ -40,7 +40,7 @@
             AuthService.doLogOut()
                 .then(function(result){
                     if(result.success){
-                        $state.go('login');
+                        $state.go('inicio');
                     }
                 });
         }

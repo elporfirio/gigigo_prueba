@@ -14,6 +14,7 @@
     function authService($http, postRequestFix, $window, env) {
         this.doLogin = doLogin;
         this.doLogOut = doLogOut;
+        this.isLoggedIn = isLoggedIn;
 
         ////////////////
 
@@ -60,6 +61,10 @@
             function doLoginFailed(error){
                 return {success: false, error: error};
             }
+        }
+
+        function isLoggedIn(){
+            return ($window.localStorage.email !== undefined && $window.localStorage.token !== undefined)
         }
     }
 

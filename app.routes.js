@@ -5,12 +5,14 @@ angular
     .module('tiendita')
     .config(configRoutes);
 
-function configRoutes($stateProvider) {
+function configRoutes($urlRouterProvider, $stateProvider) {
 
-    var loginState = {
-        name: 'login',
-        url: '/login',
-        templateUrl: 'modules/auth/login.view.html',
+    $urlRouterProvider.otherwise('/inicio');
+
+    var inicioState = {
+        name: 'inicio',
+        url: '/inicio',
+        templateUrl: 'modules/inicio/inicio.view.html',
         controller: 'AuthController',
         controllerAs: 'authctrl'
     };
@@ -31,7 +33,7 @@ function configRoutes($stateProvider) {
         controllerAs: 'tiendactrl'
     };
 
-    $stateProvider.state(loginState);
+    $stateProvider.state(inicioState);
     $stateProvider.state(logOutState);
     $stateProvider.state(homeState);
 }
