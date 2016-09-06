@@ -1,0 +1,35 @@
+<a ui-sref="logout">Cerrar sesión</a>
+<h1>Tiendita</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th colspan="2">
+
+        </th>
+    </tr>
+    <tr ng-repeat="producto in tiendactrl.productos">
+        <td>
+            {{ producto.id }}
+        </td>
+        <td>
+            <a href="" ng-click="tiendactrl.detalleProducto(producto)">{{ producto.name }}</a>
+        </td>
+        <td>
+            <button ng-click="tiendactrl.mostrarEditar(producto)">editar</button>
+        </td>
+        <td>
+            <button ng-click="tiendactrl.eliminarProducto(producto)">eliminar</button>
+        </td>
+    </tr>
+</table>
+
+<button ng-click="tiendactrl.mostrarNuevo()" ng-hide="tiendactrl.agregarNuevo">Agregar</button>
+
+<div ng-show="tiendactrl.agregarNuevo">
+    <div ng-include="'modules/home/producto.form.html'" ></div>
+</div>
+
+<div ng-show="tiendactrl.mostrarDetalle">
+    <div ng-include="'modules/home/producto.view.html'" ></div>
+</div>
